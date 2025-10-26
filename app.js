@@ -87,6 +87,9 @@ app.use("/listings", listingRoute);
 app.use("/listings/:id/reviews", reviewsRoute); // phle flash ayega fir routes ayega
 app.use("/", usersRoute);
 
+app.get("/", (req, res) => {
+    res.send("Airbnb Clone API is running!");
+});
 
 // middleware
 app.use((err, req, res, next) => {
@@ -95,6 +98,7 @@ app.use((err, req, res, next) => {
 });
 
 // Server Route
-app.listen(8080, () => {
-    console.log("server is listening");
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+    console.log(`Server is listening on port ${PORT}`);
 });
