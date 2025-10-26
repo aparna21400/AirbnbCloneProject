@@ -1,0 +1,90 @@
+<% layout('layouts/boilerplate') -%>
+
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-sm">
+          <div class="card-header bg-white">
+            <h3 class="mb-0 text-center text-primary">Create a New Listing</h3>
+          </div>
+
+          <div class="card-body">
+            <form method="POST" action="/listings" class="needs-validation" novalidate enctype="multipart/form-data">
+              <!-- Title -->
+              <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control form-control-lg" id="title" name="listing[title]"
+                  placeholder="Enter Title" required>
+                <div class="invalid-feedback">Please provide a title.</div>
+              </div>
+
+              <!-- Description -->
+              <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control form-control-lg" id="description" name="listing[description]" rows="4"
+                  placeholder="Enter description" required></textarea>
+                <div class="invalid-feedback">Please provide a description.</div>
+              </div>
+
+              <!-- Image -->
+
+              <div class="mb-3">
+                <label for="image" class="form-label"> Upload Image</label>
+                <input type="file" class="form-control form-control-lg" id="image" name="listing[image]">
+                <div class="invalid-feedback">Please provide a valid image URL.</div>
+              </div>
+
+              <div class="row g-3">
+                <!-- Price -->
+                <div class="col-md-6">
+                  <label for="price" class="form-label">Price</label>
+                  <input type="number" class="form-control form-control-lg" id="price" name="listing[price]"
+                    placeholder="Enter price" required>
+                  <div class="invalid-feedback">Please provide a valid price.</div>
+                </div>
+
+                <!-- Country -->
+                <div class="col-md-6">
+                  <label for="country" class="form-label">Country</label>
+                  <input type="text" class="form-control form-control-lg" id="country" name="listing[country]"
+                    placeholder="Enter country" required>
+                  <div class="invalid-feedback">Please provide a country.</div>
+                </div>
+              </div>
+
+              <div class="row g-3 mt-3">
+
+                <!-- Location -->
+                <div class="col-12">
+                  <label for="location" class="form-label">Location</label>
+                  <input type="text" class="form-control form-control-lg" id="location" name="listing[location]"
+                    placeholder="Enter location" required>
+                  <div class="invalid-feedback">Please provide a location.</div>
+                </div>
+                <!-- Category - NEW FIELD -->
+                <div class="mb-3">
+                  <label for="category" class="form-label">Category</label>
+                  <select name="listing[category]" class="form-control" required>
+                    <option value="">Select a category</option>
+                    <option value="Mountains">Mountains</option>
+                    <option value="Arctic">Arctic</option>
+                    <option value="Farms">Farms</option>
+                    <option value="Pools">Pools</option>
+                    <option value="Beach">Beach</option>
+                    <option value="Lounge">Lounge</option>
+                    <option value="Camping">Camping</option>
+                    <option value="Castles">Castles</option>
+                    <option value="Iconic cities">Iconic Cities</option>
+                    <option value="Rooms">Rooms</option>
+                  </select>
+                </div>
+                <!-- Submit -->
+                <div class="d-grid mt-4">
+                  <button type="submit" class="btn btn-primary btn-lg">Create Listing</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

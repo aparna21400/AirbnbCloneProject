@@ -1,0 +1,67 @@
+<style>
+    .btn-search i {
+        display: inline;
+        margin-right: 0.5rem;
+    }
+
+    .search-inp {
+        border-radius: 25px;
+        padding: 0.5rem 3rem 0.5rem 3rem;
+        font-size: 15px;
+    }
+</style>
+<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top "
+    style="height: 5rem; background-color: white;">
+    <div class="container-fluid">
+
+        <!-- BRAND LOGO -->
+        <a class="navbar-brand" href="/listings" style="color: #b52b35; font-size: 2rem;"><i
+                class="fa-solid fa-compass"></i></a>
+
+        <!-- COLAPSABLE BUTTON -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- NAV SECTION -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <!-- Left Links -->
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/listings" style="color: black !important;">Explore</a>
+                </li>
+            </ul>
+            <!-- Search Bar -->
+            <div class="Search-bar ms-auto">
+                <form class="d-flex" role="search" action="/listings/search" method="GET">
+                    <input class="form-control me-2 search-inp" type="search" name="q" placeholder="Search destinations"
+                        aria-label="Search" value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>" />
+                    <button class="btn btn-search"
+                        style="background-color: #fe424d; border-radius: 2rem; color:white; padding:0 1rem 0 1rem;"
+                        type="submit">
+                        <i class="fa-solid fa-magnifying-glass"></i>Search
+                    </button>
+                </form>
+            </div>
+
+            <!-- Right Links (User Section) -->
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/listings/new" style="color: black !important;">Airbnb your home</a>
+                </li>
+                <% if(!currUser){ %>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/signup" style="color: black !important;"><b>Signup</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login" style="color: black !important;"><b>Login</b></a>
+                    </li>
+                    <% } else { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/logout" style="color: black !important;"><b>Log out</b></a>
+                        </li>
+                        <% } %>
+            </ul>
+        </div>
+
+</nav>
