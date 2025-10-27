@@ -1,6 +1,4 @@
-if (process.env.NODE_ENV != "production") {
-    require('dotenv').config()
-}
+require('dotenv').config();
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -20,6 +18,11 @@ const listingRoute = require("./routes/listingRoute");
 const reviewsRoute = require("./routes/reviewsRoute");
 const dbURL = process.env.ATLASDB_URL;
 
+// console.log("=== DEBUG INFO ===");
+// console.log("dbURL:", dbURL);
+// console.log("dbURL type:", typeof dbURL);
+// console.log("==================");
+
 main().then(() => {
     console.log("connected!");
 }).catch((err) => {
@@ -27,7 +30,10 @@ main().then(() => {
 });
 
 async function main() {
-    await mongoose.connect(dbURL);
+    await mongoose.connect(dbURL, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
 }
 
 app.set("views", path.join(__dirname, "views"));
@@ -42,7 +48,7 @@ const Store = MongoStore.create({
     mongoUrl: dbURL,
     crypto: {
         secret: process.env.SECRET,
-        
+
     },
     touchAfter: 24 * 3600,
 });
