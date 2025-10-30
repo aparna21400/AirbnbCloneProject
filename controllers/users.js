@@ -2,7 +2,7 @@ const user = require("../models/userModel");
 // const passport = require("passport");
 // SIGN UP
 module.exports.signupRender = (req, res) => {
-    res.render("users/signupPage");
+    res.render("Users/signupPage");
 };
 
 module.exports.signup = async (req, res, next) => {
@@ -29,7 +29,7 @@ module.exports.signup = async (req, res, next) => {
 
 //lOGIN 
 module.exports.loginRender = (req, res) => {
-    res.render("users/signupPage");
+    res.render("Users/signupPage");
 };
 
 module.exports.login = (req, res) => {
