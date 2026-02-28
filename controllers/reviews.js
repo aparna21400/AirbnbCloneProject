@@ -1,47 +1,54 @@
 const Review = require("../models/reviewModel");
 const Listings = require("../models/listingModel");
+const logger = require("../utils/logger");
 
-
+/**
+ * Create new review
+ */
 module.exports.createReview = async (req, res, next) => {
     const { id } = req.params;
+    
     try {
-
-
         // Find listing
-        const listing = await Listings.findById(req.params.id);
+        const listing = await Listings.findById(id);
+        if (!listing) {
+            req.flash("error", "Listing not found");
+            return res.redirect("/listings");
+        }
 
         // Create new review
         const newReview = new Review(req.body.review);
         newReview.author = req.user._id;
-        console.log(newReview);
-        // Add review to listing
-        listing.reviews.push(newReview);
 
-        // Save both
+        // Add review to listing and save both
+        listing.reviews.push(newReview);
         await newReview.save();
         await listing.save();
 
         req.flash("success", "New Review Created!");
-        res.redirect(`/listings/${listing._id}`);
-
-
+        return res.redirect(`/listings/${listing._id}`);
     } catch (err) {
-        console.error("Error creating review:", err);
+        logger.error(`Error creating review: ${err.message}`);
         req.flash("error", "Failed to create review!");
-        res.redirect(`/listings/${id}`);
+        return res.redirect(`/listings/${id}`);
     }
 };
 
-module.exports.deleteReview = (async (req, res) => {
+/**
+ * Delete review
+ */
+module.exports.deleteReview = async (req, res, next) => {
+    const { id, reviewId } = req.params;
+    
     try {
-        let { id, reviewId } = req.params;
         await Listings.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
         await Review.findByIdAndDelete(reviewId);
 
-        res.redirect(`/listings/${id}`);
+        req.flash("success", "Review deleted successfully!");
+        return res.redirect(`/listings/${id}`);
+    } catch (err) {
+        logger.error(`Error deleting review: ${err.message}`);
+        req.flash("error", "Failed to delete review!");
+        return res.redirect(`/listings/${id}`);
     }
-    catch (err) {
-        console.error("Error deleting review:", err);
-        res.redirect(`/listings/${id}`);
-    }
-});
+};

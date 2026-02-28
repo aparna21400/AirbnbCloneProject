@@ -3,10 +3,12 @@ const router = express.Router();
 const Listings = require("../models/listingModel");
 const mongoose = require("mongoose");
 const { isLoggedIn, isOwner } = require("../middleware");
-const listingController = require("../controllers/listings")
-const multer = require('multer')
-const { storage } = require("../cloudConfig")
-const upload = multer({ storage })
+const listingController = require("../controllers/listings");
+const multer = require('multer');
+const { storage } = require("../cloudConfig");
+const logger = require("../utils/logger");
+
+const upload = multer({ storage });
 
 router.route("/")
     .get(listingController.index)
@@ -15,7 +17,9 @@ router.route("/")
 // Create New Listing
 router.get("/new", isLoggedIn, listingController.renderNew);
 
-// SearchBar
+/**
+ * Search listings by title, location, country, description
+ */
 router.get("/search", async (req, res) => {
     const { q } = req.query;
     
@@ -25,7 +29,6 @@ router.get("/search", async (req, res) => {
     }
 
     try {
-        // Search in title, location, country, and description
         const AllListing = await Listings.find({
             $or: [
                 { title: { $regex: q, $options: 'i' } },
@@ -41,25 +44,34 @@ router.get("/search", async (req, res) => {
             req.flash("success", `Found ${AllListing.length} results for "${q}"`);
         }
 
-        res.render("Listings/indexSec.ejs", { AllListing, searchQuery: q });
+        return res.render("Listings/indexSec.ejs", { AllListing, searchQuery: q });
     } catch (err) {
-        console.error(err);
+        logger.error(`Search error: ${err.message}`);
         req.flash("error", "Error searching listings");
-        res.redirect("/listings");
+        return res.redirect("/listings");
     }
 });
 
-// Category filter
+/**
+ * Filter listings by category
+ */
 router.get("/category/:category", async (req, res) => {
     const { category } = req.params;
-    const AllListing = await Listings.find({ category: category });
-    res.render("Listings/indexSec.ejs", { AllListing });
+    
+    try {
+        const AllListing = await Listings.find({ category: category });
+        return res.render("Listings/indexSec.ejs", { AllListing });
+    } catch (err) {
+        logger.error(`Category filter error: ${err.message}`);
+        req.flash("error", "Error filtering by category");
+        return res.redirect("/listings");
+    }
 });
 
-
+// Single listing routes
 router.route("/:id")
     .get(listingController.renderShow)
-    .put(isLoggedIn, isOwner, upload.single('listing[image]'), listingController.renderUpdate) // Added upload middleware here
+    .put(isLoggedIn, isOwner, upload.single('listing[image]'), listingController.renderUpdate)
     .delete(isLoggedIn, isOwner, listingController.renderDelete);
 
 // Edit Route
